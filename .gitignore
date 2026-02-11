@@ -1,0 +1,28 @@
+# Virtual Environment
+venv/
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# MacOS
+.DS_Store
+
+# VSCode
+.vscode/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs
+*.log
+
+# FAISS index files (if you generate them)
+*.index
+*.faiss
+
+# Local embedding models (if downloaded)
+models/
