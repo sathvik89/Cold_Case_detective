@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cold Case Investigator</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <!-- left: the case file -->
+      <aside class="side">
+        <div class="brand">
+          <span class="mark">◉</span>
+          <div>
+            <h1>Cold Case</h1>
+            <p>Investigator</p>
+          </div>
+        </div>
+
+        <div class="settings" id="settings"></div>
+
+        <div class="section-head">
+          <span>Evidence</span>
+          <span class="count" id="count">0</span>
+        </div>
+
+        <div class="evidence" id="evidence"></div>
+
+        <label class="add" id="add">
+          <input type="file" id="file" accept=".txt,text/plain" hidden />
+          <span class="add-plus">+</span>
+          <span>Add evidence (.txt)</span>
+        </label>
+      </aside>
+
+      <!-- right: the investigation -->
+      <main class="main">
+        <div class="thread" id="thread">
+          <div class="empty" id="empty">
+            <div class="empty-mark">◉</div>
+            <h2>Question the evidence</h2>
+            <p>Every report is written only from the files on the left, and each one cites the evidence it came from.</p>
+            <div class="chips" id="chips">
+              <button class="chip" type="button">What happened on the night of the incident?</button>
+              <button class="chip" type="button">Who are the suspects and what links them?</button>
+              <button class="chip" type="button">What forensic evidence was recovered?</button>
+            </div>
+          </div>
+        </div>
+
+        <form class="composer" id="composer" autocomplete="off">
+          <textarea id="question" rows="1" placeholder="Add an API key in Settings to begin"></textarea>
+          <button type="submit" id="send" disabled aria-label="Investigate">
+            <span class="send-label">Investigate</span>
+            <span class="spinner" aria-hidden="true"></span>
+          </button>
+        </form>
+      </main>
+    </div>
+
+    <script src="/static/settings.js"></script>
+    <script src="/static/app.js"></script>
+  </body>
+</html>
