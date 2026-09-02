@@ -3,3 +3,8 @@ python-dotenv
 sentence-transformers
 faiss-cpu
 numpy
+
+# web UI (app.py) - the terminal version (main.py) does not need these
+fastapi
+uvicorn[standard]
+python-multipart

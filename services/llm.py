@@ -1,19 +1,11 @@
 import os
-from openai import OpenAI
+
 from dotenv import load_dotenv
+
+import providers
 
 load_dotenv()
 
-def get_client():
-    api_key = os.getenv("GROQ_API_KEY")
-    
-    if not api_key:
-        raise ValueError("❌ Error: GROQ_API_KEY not found in environment. Check your .env file.")
-        
-    return OpenAI(
-        api_key=api_key,
-        base_url="https://api.groq.com/openai/v1"
-    )
 
 def build_prompt(question, documents):
     context = ""
@@ -23,6 +15,8 @@ def build_prompt(question, documents):
     return f"""You are a Cold Case Investigator AI. 
 Analyze the provided evidence to answer the question.
 If the answer is missing from the files, state "Evidence inconclusive."
+Write the report in plain text. Do not use markdown or asterisks for emphasis -
+the report is shown as plain text and the markup would be visible.
 
 QUESTION: {question}
 ---
@@ -30,11 +24,21 @@ EVIDENCE: {context}
 ---
 FINAL INVESTIGATIVE REPORT:"""
 
-def generate_answer(prompt):
-    client = get_client()
-    response = client.chat.completions.create(
-        model="llama-3.1-8b-instant",
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.1
+
+def generate_answer(prompt, provider=None, api_key=None, model=None):
+    """
+    Send the prompt to whichever provider is configured. The web UI passes the
+    provider and key in explicitly; the terminal version falls back to
+    AI_PROVIDER / AI_MODEL and the keys in .env.
+    """
+    provider, key, model = providers.resolve(
+        provider or os.getenv("AI_PROVIDER"),
+        api_key,
+        model or os.getenv("AI_MODEL"),
     )
-    return response.choices[0].message.content
+    completion = providers.client_for(provider, key).chat.completions.create(
+        model=model,
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.1,
+    )
+    return completion.choices[0].message.content or ""
